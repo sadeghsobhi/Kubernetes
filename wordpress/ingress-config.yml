@@ -1,0 +1,29 @@
+#
+# This example is for Kubernetes running an nginx-ingress
+# and an ACME (e.g. Let's Encrypt) certificate service
+#
+# The nginx-ingress annotations support the dashboard
+# running using HTTPS with a self-signed certificate
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+  namespace: wp
+spec:
+  ingressClassName: "nginx"
+  tls:
+    - hosts:
+        - "wordpress.domainname.com"
+      secretName: "secret"
+  rules:
+    - host: "wordpress.domainname.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wordpress
+                port:
+                  number: 80
